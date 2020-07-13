@@ -400,6 +400,7 @@ export interface User {
   email?: string;
   emailVerified: boolean;
   displayName?: string;
+  fullName?: string;
   phoneNumber?: string;
   anonymous: boolean;
   isAnonymous: boolean; // This is used by the web API
