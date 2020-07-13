@@ -13,6 +13,7 @@ firebase._gIDAuthentication = null;
 firebase._cachedDynamicLink = null;
 firebase._configured = false;
 firebase._currentNonce = null;
+firebase._appleSignInIdToken = null;
 
 const useExternalPushProvider = NSBundle.mainBundle.infoDictionary.objectForKey("UseExternalPushProvider") === true;
 
@@ -639,7 +640,7 @@ function toLoginResult(user, additionalUserInfo?: FIRAdditionalUserInfo): User {
         const gidCurrentIdToken = GIDSignIn.sharedInstance().currentUser.authentication.idToken;
         providers.push({id: pid, token: gidCurrentIdToken});
       } else if (pid === "apple.com") {
-        // TODO
+        providers.push({ id: pid, token: firebase_common_1.firebase._appleSignInIdToken });
       } else {
         providers.push({id: pid});
       }
@@ -2458,7 +2459,7 @@ class ASAuthorizationControllerDelegateImpl extends NSObject /* implements ASAut
       if (!idToken) {
         throw new Error("Unable to serialize id token from data: " + appleIDCredential.identityToken);
       }
-
+      firebase._appleSignInIdToken = idToken;
       // Initialize a Firebase credential.
       const fIROAuthCredential = FIROAuthProvider.credentialWithProviderIDIDTokenRawNonce(
           "apple.com", idToken, rawNonce);
